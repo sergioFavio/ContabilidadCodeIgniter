@@ -169,17 +169,11 @@
                     		<li><a href="<?=base_url();?>contabilidad/comprobante?tipoComprobante=ingreso"><span class="glyphicon glyphicon-log-in"></span> Ingreso</a></li>
 							<li><a href="<?=base_url();?>contabilidad/comprobante?tipoComprobante=egreso"><span class="glyphicon glyphicon-log-out"></span> Egreso</a></li>
 							<li><a href="<?=base_url();?>contabilidad/comprobante?tipoComprobante=diario"><span class="glyphicon glyphicon-new-window"></span> Diario</a></li>
-							
 							<li><a href="<?=base_url();?>contabilidad/buscarComprobante"><span class="glyphicon glyphicon-edit"></span> Modificar</a></li>
+								
+							<li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-unchecked"></span> Ajuste ...PENDIENTE</a></li>
 							
-							<li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-search"></span> Buscar</a>
-	                    		<ul class="dropdown-menu">
-		                    		<li><a href="<?=base_url();?>contabilidad/...?tipoComprobante=ingreso"><span class="glyphicon glyphicon-log-in"></span> Ingreso</a></li>
-									<li><a href="<?=base_url();?>contabilidad/...?tipoComprobante=egreso"><span class="glyphicon glyphicon-log-out"></span> Egreso</a></li>
-									<li><a href="<?=base_url();?>contabilidad/...?tipoComprobante=diario"><span class="glyphicon glyphicon-new-window"></span> Diario</a></li>
-								</ul>	
-							</li>
-							
+							<li><a href="<?=base_url();?>contabilidad/verComprobante"><span class="glyphicon glyphicon-search"></span> Buscar</a></li>
 						</ul>
 					</li>
                     <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list-alt"></span> Reportes</a>

@@ -954,7 +954,6 @@ class Contabilidad extends CI_Controller {
 		$fechasGestiones= $this->tablaGenerica_model->getTodos('contagestion'); //..una vez cargado el modelo de la tabla llama contagestion..
 			
 		$datos['fechasGestiones']=$fechasGestiones;
-//		$datos['tipoTransaccion']=$tipoTransaccion;
 
 		$datos['tituloReporte']=$tituloReporte;
 		$datos['reporte']=$reporte;
@@ -1973,6 +1972,147 @@ class Contabilidad extends CI_Controller {
 			}	//.. fin IF validar usuario ...
         
 	} //... fin funcion: generarReporteEstadoResultados ...
+	
+	
+	function verComprobante(){
+		//... control de permisos de acceso ....
+		$permisoUserName=$this->session->userdata('userName');
+		$permisoMenu=$this->session->userdata('usuarioMenu');
+		$permisoProceso1=$this->session->userdata('usuarioProceso1');
+		if($permisoUserName!='superuser' && $permisoUserName!='developer' && $permisoMenu!='contabilidad'){  //... valida permiso de userName y de menu ...
+			$datos['mensaje']='Usuario NO autorizado para operar Sistema de Contabilidad';
+			$this->load->view('header');
+			$this->load->view('mensaje',$datos );
+			$this->load->view('footer');
+		}			// ... fin control permiso de accesos...
+		else {
+			$this->load->model("tablaGenerica_model");
+			
+			/* URL a la que se desea agregar la paginación*/
+	    	$config['base_url'] = base_url().'contabilidad/verComprobante';
+			
+			/*Obtiene el total de registros a paginar */
+	    	$config['total_rows'] = $this->tablaGenerica_model->get_total_registros('comprobantecabecera');
+		
+			$contador= $this->tablaGenerica_model->get_total_registros('comprobantecabecera'); //...contador de registros  ...		
+			if($contador==0){
+				$datos['mensaje']='No hay registros para mostrar ';
+				$this->load->view('header');
+				$this->load->view('mensaje',$datos );
+				$this->load->view('footer');
+			}else{
+				/*Obtiene el numero de registros a mostrar por pagina */
+				$config['per_page'] = '1';
+				
+				/*Indica que segmento de la URL tiene la paginación, por default es 3*/
+				$config['uri_segment'] = '3';
+				$desde = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			  
+				/*Se personaliza la paginación para que se adapte a bootstrap*/
+			    $config['cur_tag_open'] = '<li class="active"><a href="#">';
+			    $config['cur_tag_close'] = '</a></li>';
+			    $config['num_tag_open'] = '<li>';
+			    $config['num_tag_close'] = '</li>';
+			    $config['last_link'] = FALSE;
+			    $config['first_link'] = FALSE;
+			    $config['next_link'] = '&raquo;';
+			    $config['next_tag_open'] = '<li>';
+			    $config['next_tag_close'] = '</li>';
+			    $config['prev_link'] = '&laquo;';
+			    $config['prev_tag_open'] = '<li>';
+			    $config['prev_tag_close'] = '</li>';
+				
+				/* Se inicializa la paginacion*/
+				$this->pagination->initialize($config);
+			
+				/* Se obtienen los registros a mostrar*/ 
+				$datos['listaComprobante'] = $this->tablaGenerica_model->get_registros('comprobantecabecera',$config['per_page'], $desde); 
+			
+				$datos['consultaComprobante'] ='';
+				
+				/*Se llama a la vista para mostrar la información*/
+				$this->load->view('header');
+				$this->load->view('contabilidad/verComprobantes', $datos);
+				$this->load->view('footer');
+			}//..fin IF contador registros mayor que cero ..
+			
+		}	//... fin IF validar usuario ...
+		
+	}	//...fin funcion: verComprobante ...
+	
+	
+	public function ubicarComprobante(){
+		//... buscar los registros que coincidan con el patron busqueda ingresado ...
+	    $campo1='numComprobante';   //... el campo por elcual se va hacer la búsqueda ...
+		
+		if(isset($_POST['inputBuscarPatron'])){
+			$consultaComprobante=$_POST['inputBuscarPatron'];
+			
+			// Escribimos una primera línea en consultaComprobante.txt
+			$fp = fopen("pdfsArchivos/consultaComprobante.txt", "w");
+			fputs($fp, $consultaComprobante);
+			fclose($fp); 
+
+		}else{
+			// Leemos la primera línea de consultaComprobante.txt
+			// fichero.txt es un archivo de texto normal creado con notepad, por ejemplo.
+			$fp = fopen("pdfsArchivos/consultaComprobante.txt", "r");
+			$consultaComprobante = fgets($fp);
+			fclose($fp); 
+		}	
+		
+		$this-> load -> model("tablaGenerica_model");
+		
+		$totalRegistrosEncontrados=0;		
+		$totalRegistrosEncontrados=$this->tablaGenerica_model->getTotalRegistrosBuscar('comprobantecabecera',$campo1,$consultaComprobante);
+		//echo"total registros econtrados".$totalRegistrosEncontrados;
+		if($totalRegistrosEncontrados==0){
+		//	$datos['mensaje']='No hay registros grabados en la tabla '.$nombreTabla;
+		//	$this->load->view('mensaje',$datos );
+		//	redirect('produccion/crudVerCotizaciones');
+			redirect('menuController/index');
+		}else{
+			/* URL a la que se desea agregar la paginación*/
+	    	$config['base_url'] = base_url().'contabilidad/ubicarComprobante';
+			
+			/*Obtiene el total de registros a paginar */
+	    	$config['total_rows'] = $this->tablaGenerica_model->getTotalRegistrosBuscar('comprobantecabecera',$campo1,$consultaComprobante);
+		
+			/*Obtiene el numero de registros a mostrar por pagina */
+	    	$config['per_page'] = '1';
+			
+			/*Indica que segmento de la URL tiene la paginación, por default es 3*/
+	    	$config['uri_segment'] = '3';
+			$desde = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	  
+			/*Se personaliza la paginación para que se adapte a bootstrap*/
+		    $config['cur_tag_open'] = '<li class="active"><a href="#">';
+		    $config['cur_tag_close'] = '</a></li>';
+		    $config['num_tag_open'] = '<li>';
+		    $config['num_tag_close'] = '</li>';
+		    $config['last_link'] = FALSE;
+		    $config['first_link'] = FALSE;
+		    $config['next_link'] = '&raquo;';
+		    $config['next_tag_open'] = '<li>';
+		    $config['next_tag_close'] = '</li>';
+		    $config['prev_link'] = '&laquo;';
+		    $config['prev_tag_open'] = '<li>';
+		    $config['prev_tag_close'] = '</li>';
+			
+			/* Se inicializa la paginacion*/
+	    	$this->pagination->initialize($config);
+	
+			/* Se obtienen los registros a mostrar*/ 
+			$datos['listaComprobante'] = $this-> tablaGenerica_model -> buscarPaginacion('comprobantecabecera',$campo1,$consultaComprobante, $config['per_page'], $desde );
+			$datos['consultaComprobante'] =$consultaComprobante;
+			
+			/*Se llama a la vista para mostrar la información*/
+			$this->load->view('header');
+			$this->load->view('contabilidad/verComprobantes', $datos);
+			$this->load->view('footer');
+		}		//... fin IF total registros encintrados ...
+		
+	}		//... fin funcion: buscarComprobante ...
 	
 	
 }

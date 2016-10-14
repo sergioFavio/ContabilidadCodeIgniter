@@ -63,7 +63,7 @@ $(document).ready(function(){
         <div class="modal-content">
             <div class="modal-body" >
             	<?php
-            		shell_exec('c:\xampp\mysql\bin\mysqldump -u root irbadb>c:\respaldoBD\irbaDB.sql');
+            		shell_exec('c:\xampp\mysql\bin\mysqldump -u root contabilidad>c:\respaldoBD\contabilidadDB.sql');
                     echo img('/assets/img/loading.gif');
                 ?>    
                 <h4>Procesando... <button type="button" class="close" style="float:none;" data-dismiss="modal" aria-hidden="true"  onClick="window.location.href='<?=base_url();?>menuController/index'" >×</button></h4>

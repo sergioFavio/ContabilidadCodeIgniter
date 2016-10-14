@@ -47,7 +47,7 @@ $(document).ready(function() {
 				     
 				<div class="col-xs-3">
 					<div class="input-group input-group-sm">
-				    	<span class="input-group-addon" id="letraCabecera" >Fecha de Gestión</span>
+				    	<span class="input-group-addon" id="letraCabecera" >Per&iacute;odo de Gestión</span>
 		    	 		<select class = "form-control input-sm" id="fechaDeGestion" name="fechaDeGestion" placeholder="fecha de gestión&hellip;" style="width:85px;font-size:11px;text-align:center;">
 						   <?php foreach($fechasGestiones as $fechaGestion):?>
 					         <option value="<?= $fechaGestion['gestion'] ?>"> <?= substr($fechaGestion['gestion'],0,4).'-'.substr($fechaGestion['gestion'],4,2) ?> </option>

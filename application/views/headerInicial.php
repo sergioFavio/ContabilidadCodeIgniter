@@ -29,7 +29,7 @@
 								</td>
 								<td>
 									<center>
-										Sistema de Informaci&oacute;n IRBA Ltda.
+										Sistema de Informaci&oacute;n EXPRINTUR Ltda.
 									</center>
 								</td>
 								<td>
